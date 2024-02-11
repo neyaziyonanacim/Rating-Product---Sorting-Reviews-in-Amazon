@@ -19,7 +19,7 @@
 # This dataset containing Amazon product data includes various metadata along with product categories. 
 # It includes user ratings and reviews for the product that received the highest number of reviews in the Electronics category.
 
-# Değişkenler:
+# Variables: 
 # reviewerID: user's ID
 # asin: product's ID
 # reviewerName: User name
@@ -29,7 +29,7 @@
 # summary: Assessment summary
 # unixReviewTime: Assessment time
 # reviewTime: Assessment time-raw
-# day_diff: Değerlendirmeden itibaren geçen gün sayısı
+# day_diff: The number of days since the review
 # helpful_yes: The number of days since the review
 # total_vote: The number of votes given to the review
 
