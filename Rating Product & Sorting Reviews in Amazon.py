@@ -4,36 +4,34 @@
 ###################################################
 
 ###################################################
-# İş Problemi
+# Business Problem
 ###################################################
 
-# E-ticaretteki en önemli problemlerden bir tanesi ürünlere satış sonrası verilen puanların doğru şekilde hesaplanmasıdır.
-# Bu problemin çözümü e-ticaret sitesi için daha fazla müşteri memnuniyeti sağlamak, satıcılar için ürünün öne çıkması ve satın
-# alanlar için sorunsuz bir alışveriş deneyimi demektir. Bir diğer problem ise ürünlere verilen yorumların doğru bir şekilde sıralanması
-# olarak karşımıza çıkmaktadır. Yanıltıcı yorumların öne çıkması ürünün satışını doğrudan etkileyeceğinden dolayı hem maddi kayıp
-# hem de müşteri kaybına neden olacaktır. Bu 2 temel problemin çözümünde e-ticaret sitesi ve satıcılar satışlarını arttırırken müşteriler
-# ise satın alma yolculuğunu sorunsuz olarak tamamlayacaktır.
+# One of the most significant problems in e-commerce is the accurate calculation of post-purchase ratings given to products.
+# The solution to this problem means providing more customer satisfaction for e-commerce websites, highlighting products for sellers, and ensuring a seamless shopping experience for buyers. 
+# Another challenge is the accurate sorting of product reviews. Since misleading reviews can directly impact the sales of a product, it may result in both financial loss and customer attrition. 
+# Addressing these two fundamental problems will not only increase sales for e-commerce sites and sellers but also allow customers to complete their purchasing journey smoothly."
 
 ###################################################
-# Veri Seti Hikayesi
+# Dataset Overwiew
 ###################################################
 
-# Amazon ürün verilerini içeren bu veri seti ürün kategorileri ile çeşitli metadataları içermektedir.
-# Elektronik kategorisindeki en fazla yorum alan ürünün kullanıcı puanları ve yorumları vardır.
+# This dataset containing Amazon product data includes various metadata along with product categories. 
+# It includes user ratings and reviews for the product that received the highest number of reviews in the Electronics category.
 
 # Değişkenler:
-# reviewerID: Kullanıcı ID’si
-# asin: Ürün ID’si
-# reviewerName: Kullanıcı Adı
-# helpful: Faydalı değerlendirme derecesi
-# reviewText: Değerlendirme
-# overall: Ürün rating’i
-# summary: Değerlendirme özeti
-# unixReviewTime: Değerlendirme zamanı
-# reviewTime: Değerlendirme zamanı Raw
+# reviewerID: user's ID
+# asin: product's ID
+# reviewerName: User name
+# helpful: Useful rating level
+# reviewText: Assessment
+# overall: Product rating
+# summary: Assessment summary
+# unixReviewTime: Assessment time
+# reviewTime: Assessment time-raw
 # day_diff: Değerlendirmeden itibaren geçen gün sayısı
-# helpful_yes: Değerlendirmenin faydalı bulunma sayısı
-# total_vote: Değerlendirmeye verilen oy sayısı
+# helpful_yes: The number of days since the review
+# total_vote: The number of votes given to the review
 
 import pandas as pd
 import math
@@ -47,16 +45,17 @@ pd.set_option("display.float_format",lambda x: "%.5f" % x)
 
 
 ###################################################
-# GÖREV 1: Average Rating'i Güncel Yorumlara Göre Hesaplayınız ve Var Olan Average Rating ile Kıyaslayınız.
+# Tsk 1:Calculate the Average Rating based on the recent reviews and compare it with the existing Average Rating.
 ###################################################
 
-# Paylaşılan veri setinde kullanıcılar bir ürüne puanlar vermiş ve yorumlar yapmıştır.
-# Bu görevde amacımız verilen puanları tarihe göre ağırlıklandırarak değerlendirmek.
-# İlk ortalama puan ile elde edilecek tarihe göre ağırlıklı puanın karşılaştırılması gerekmektedir.
+
+# The shared dataset includes user ratings and reviews for a product. 
+# The goal of this task is to evaluate the given ratings by weighting them based on the date.
+# A comparison between the initial average rating and the date-weighted rating obtained needs to be performed."
 
 
 ###################################################
-# Adım 1: Veri Setini Okutunuz ve Ürünün Ortalama Puanını Hesaplayınız.
+# Step 1: Read dataset and calculate the average point of product.  
 ###################################################
 
 df=pd.read_csv("Datasets/amazon_review.csv")
@@ -65,7 +64,7 @@ df.head(20)
 df["overall"].mean()
 
 ###################################################
-# Adım 2: Tarihe Göre Ağırlıklı Puan Ortalamasını Hesaplayınız.
+# Adım 2: Calculate the weighted point average per time.
 ###################################################
 
 df.dtypes
@@ -99,23 +98,23 @@ time_based_weighted_average(df)
 # 4.568060108268714
 
 ###################################################
-# Görev 2: Ürün için Ürün Detay Sayfasında Görüntülenecek 20 Review'i Belirleyiniz.
+# Task 2: For product, indicate 20 review to be demonstrated in product detail page.
 ###################################################
 
 ###################################################
-# Adım 1. helpful_no Değişkenini Üretiniz
+# Step 1. Generate teh varibale of "helpful_no"
 ###################################################
 
-# Not:
-# total_vote bir yoruma verilen toplam up-down sayısıdır.
-# up, helpful demektir.
-# veri setinde helpful_no değişkeni yoktur, var olan değişkenler üzerinden üretilmesi gerekmektedir.
+# Note:
+# total_vote is a total up-down number given to a comment.
+# up means "helpful".
+# There isn't the variable of "helpful_no" in dataset. It should be generated through already existing variables.  
 
 df["helpful_no"] =df["total_vote"] - df["helpful_yes"]
 df.head()
 
 ###################################################
-# Adım 2. score_pos_neg_diff, score_average_rating ve wilson_lower_bound Skorlarını Hesaplayıp Veriye Ekleyiniz
+# Step 2. Calculate score of score_pos_neg_diff, score_average_rating and wilson_lower_bound. Add them to dataset.
 ###################################################
 
 df["score_pos_neg_diff"] = df.apply(lambda x: score_pos_neg_diff(x["helpful_yes"], x["helpful_no"]), axis=1)
@@ -140,7 +139,7 @@ df["wilson_lower_bound"] = df.apply(lambda x:wilson_lower_bound(x["helpful_yes"]
 
 
 ##################################################
-# Adım 3. 20 Yorumu Belirleyiniz ve Sonuçları Yorumlayınız.
+# Step 3. Indicate 20 comments and evaluate those results.
 ###################################################
 
 df[["overall","helpful_yes","total_vote","days","helpful_no", "score_pos_neg_diff", "score_average_rating","wilson_lower_bound"]]\
